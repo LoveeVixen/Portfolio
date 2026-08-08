@@ -2,6 +2,7 @@
  <html>
     <head>
         <link rel="stylesheet" href="style.css">
+        <script src="ProjectDisplay.js" defer></script>
         <title>Kirk Hogden</title>
     </head>
 
@@ -14,19 +15,14 @@
             <a href="index.html">Portfolio</a> | <a href="gamejams.html">Game Jams</a> | <a href="personalwork.html">Personal Work</a>
         </p></div>
 
-        <h2>Game Jam Submissions</h2>
-        <h3>Hover over a game to read about them.</h3>
+        <h2>Game Jam Submissions</h2></br>
 
-        <!-- Brighton Love Match -->
-        <div class="imageContainer">
-            <img src="Images/brightonlovematch.png" alt="Final project">
-            <div class="imageOverlayText">Working in a team of five, I contributed to programming towards this game jam. As another member of the team contributed in programming, we used Github to work together.</div>
-        </div>
+        <h2 id="projectTitle">Click on a game to read about it!</h2>
+        <h3 id="projectLabels"></h3>
+        <p id="projectMedia"></p>
+        <p id="projectContent"></p>
 
-        <!-- Reverse Venom -->
-        <div class="imageContainer">
-            <img src="Images/reversevenom.png" alt="Final project">
-            <div class="imageOverlayText">I used this game jam to challenge myself at making a game outside of a game engine. With what I know of C#, I was able to use that knowledge to program in JavaScript on a HTML canvas.</div>
-        </div>
+        <button onclick="DisplayProject('Brighton Love Match')" style="background:none; border: none;"><img src="Images/brightonlovematch.png" alt="Brighton Love Match" width="400"></button>
+        <button onclick="DisplayProject('Reverse Venom')" style="background:none; border: none;"><img src="Images/reversevenom.png" alt="Reverse Venom" width="400"></button>
     </div>
  </html>

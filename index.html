@@ -2,6 +2,7 @@
  <html>
     <head>
         <link rel="stylesheet" href="style.css">
+        <script src="ProjectDisplay.js" defer></script>
         <title>Kirk Hogden</title>
     </head>
 
@@ -16,17 +17,17 @@
         
         </br>
 
+        <h2>About Me</h2>
         <img src="Images/me.jpg" width="300" alt="Me on my graduation day!">
         <p>Hello! I am Kirk Hogden. I graduated from University of Greenwich with a upper second-class honors in Game Development & Design.</p>
         <p>Below is my portfolio which showcases my best work.</p>
 
         </br>
-        
-        <h2>Portfolio</h2>
-        <h3>Click to read more on each project.</h3>
-        <div class="imageContainer">
-            <img src="Images/infinitecosmos.png" alt="Final project">
-            <a href="finalproject.html"><div class="imageOverlayText">My final project at University of Greenwich, in which I would study on improving adaptive soundtracks for video-games.</div></a>
-        </div>
+        <h2 id="projectTitle">Click on any project to read about them!</h2>
+        <h3 id="projectLabels"></h3>
+        <p id="projectMedia"></p>
+        <p id="projectContent"></p>
+
+        <button onclick="DisplayProject('Final Project')" style="background:none; border: none;"><img src="Images/infinitecosmos.png" alt="Final project" width="400"></button>
     </div>
  </html>
