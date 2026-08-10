@@ -1,10 +1,10 @@
 // KHOGDEN
 class Subject
 {
-    constructor(header, description)
+    constructor(header, paragraphs)
     {
         this.header = header;
-        this.description = description;
+        this.paragraphs = paragraphs;
     }
 }
 
@@ -69,7 +69,11 @@ function DisplayProject(projectTitle)
     content.innerHTML = "</br>";
     for(let i = 0; i < project.subjects.length; i++)
     {
-        content.innerHTML += "<h3>" + project.subjects[i].header + "</h3>" + project.subjects[i].description + "</br>";
+        content.innerHTML += "<h3>" + project.subjects[i].header + "</h3>"
+        for(let e = 0; e < project.subjects[i].paragraphs.length; e++)
+        {
+            content.innerHTML += "<p>" + project.subjects[i].paragraphs[e] + "</p>";
+        }
     }
 }
 
@@ -77,9 +81,17 @@ function DisplayProject(projectTitle)
 var cpp = new Label("C++", "#176cff");
 var cSharp = new Label("C#", "#4589ff");
 var js = new Label("JavaScript", "#7c6500");
+var html = new Label("HTML", "#df6f06");
+var oop = new Label("OOP", "#9d5b1e");
+var unity = new Label("Unity Engine", "#2a2b2b");
+var unreal = new Label("Unreal Engine", "#912a2a");
+var levelDesign = new Label("Level Design", "#d30094");
 var research = new Label("Research", "#d36104");
+var scrum = new Label("SCRUM", "#7a0d4f");
+
 
 // My projects.
+
 
 // Final year project
 var finalProject = new Project("Final Project");
@@ -89,7 +101,10 @@ finalProject.labels.push(research);
 
 finalProject.subjects.push(new Subject(
     "Summary",
-    "This is my final year project I completed at University of Greenwich. During this project, I was researching on adaptive soundtracks."
+    [
+        "This is my final year project I completed at University of Greenwich. During this project, I was researching on adaptive soundtracks.",
+        "Paragraph 2"
+    ]
 ));
 
 // Brighton Love Match
@@ -99,15 +114,24 @@ brighton.labels.push(cSharp);
 
 brighton.subjects.push(new Subject(
     "Summary",
-    ""
+    [
+        "Paragraph 1",
+        "Paragraph 2"
+    ]
 ));
 
 // Reverse Venom
 var reverseVenom = new Project("Reverse Venom");
 reverseVenom.media = "<img src='Images/reversevenom.png' alt='Reverse Venom' width='400'>";
 reverseVenom.labels.push(js);
+reverseVenom.labels.push(html);
+reverseVenom.labels.push(levelDesign);
+reverseVenom.labels.push(oop);
 
 reverseVenom.subjects.push(new Subject(
     "Summary",
-    ""
+    [
+        "Paragraph 1",
+        "Paragraph 2"
+    ]
 ));
