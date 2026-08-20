@@ -84,12 +84,14 @@ var cpp = new Label("C++", "#176cff");
 var cSharp = new Label("C#", "#4589ff");
 var js = new Label("JavaScript", "#7c6500");
 var html = new Label("HTML", "#df6f06");
+var cSound = new Label("CSound", "#378cfc");
 var oop = new Label("OOP", "#9d5b1e");
-var unity = new Label("Unity Engine", "#2a2b2b");
+var unity = new Label("Unity Engine", "#5d5f5f");
 var unreal = new Label("Unreal Engine", "#912a2a");
 var levelDesign = new Label("Level Design", "#d30094");
 var research = new Label("Research", "#d36104");
 var scrum = new Label("SCRUM", "#7a0d4f");
+var github = new Label("GitHub", "#754ada");
 
 
 // My projects.
@@ -98,27 +100,48 @@ var scrum = new Label("SCRUM", "#7a0d4f");
 // Final year project
 var finalProject = new Project("Final Project");
 finalProject.media = "<img src='Images/infinitecosmos.png' alt='Final project' width='400'>";
+finalProject.labels.push(unity);
 finalProject.labels.push(cSharp);
+finalProject.labels.push(cSound);
+finalProject.labels.push(levelDesign);
 finalProject.labels.push(research);
+finalProject.labels.push(github);
 
 finalProject.subjects.push(new Subject(
     "Summary",
     [
-        "This is my final year project I completed at University of Greenwich. During this project, I was researching on adaptive soundtracks.",
-        "Paragraph 2"
+        "This is my final year project I completed at University of Greenwich. This project involved research towards a solution for the repetitiveness that comes from linear video-game soundtracks.",
+        "Music matters in video-games. Despite the current state of the art with soundtracks however, games still often use linear soundtracks which gradually become tedious and break immersion from player experience. <i>Plut, C. and Pasquier, P. (2019)</i>",
+        "This project uses generative music to study immersion within participants while playing."
+    ]
+));
+
+finalProject.subjects.push(new Subject(
+    "Project Pitch",
+    [
+        "<a href='PDFs/finalprojectpitch.pdf'>Click here to see the project pitch.</a>"
+    ]
+));
+
+finalProject.subjects.push(new Subject(
+    "Research Results",
+    [
+        ""
     ]
 ));
 
 // Brighton Love Match
 var brighton = new Project("Brighton Love Match");
 brighton.media = "<img src='Images/brightonlovematch.png' alt='Brighton Love Match' width='400'>";
+brighton.labels.push(unity);
 brighton.labels.push(cSharp);
+brighton.labels.push(github);
 
 brighton.subjects.push(new Subject(
     "Summary",
     [
-        "Paragraph 1",
-        "Paragraph 2"
+        "A Match Made in Brighton is a submission I collaborated on with five others in-person for the <a href='https://itch.io/jam/2024-valentines-day-game-jam'>2024 Valentine's Day Game Jam.</a> Participating in this game jam was part of a module I was studying at university for, 'Rapid Prototyping'. I had the role of programming in C#.",
+        "<a href='https://itch.io/jam/2024-valentines-day-game-jam/rate/2555421'>Click here to see the game submission and download.</a>"
     ]
 ));
 
