@@ -124,9 +124,24 @@ finalProject.subjects.push(new Subject(
 ));
 
 finalProject.subjects.push(new Subject(
-    "Research Results",
+    "GitHub",
     [
-        ""
+        "Like most of my university modules I studied on that didn't involve team collaboration, I used GitHub to save my work and continue wherever I left off, whether in the university campus or at home.",
+    ]
+));
+
+finalProject.subjects.push(new Subject(
+    "CSound",
+    [
+        "During development of the project solution, I was looking for ways to integrate generative music into Unity Engine. My supervisor knew of a music computing system called CSound and recommended it to me, which had it's own Unity package.",
+        "While I didn't do CSound programming, I learnt how to implement generative music coded through CSound into Unity as part of my project."
+    ]
+));
+
+finalProject.subjects.push(new Subject(
+    "Media",
+    [
+        "<iframe src='https://drive.google.com/file/d/1q_CWNehfZ6HrU2obfkbmDyLB1g_Qp5ca/preview' width='640' height='480'></iframe>"
     ]
 ));
 
@@ -140,7 +155,7 @@ brighton.labels.push(github);
 brighton.subjects.push(new Subject(
     "Summary",
     [
-        "A Match Made in Brighton is a submission I collaborated on with five others in-person for the <a href='https://itch.io/jam/2024-valentines-day-game-jam'>2024 Valentine's Day Game Jam.</a> Participating in this game jam was part of a module I was studying at university for, 'Rapid Prototyping'. I had the role of programming in C#.",
+        "A Match Made in Brighton is a submission I collaborated on as team of five in-person for the <a href='https://itch.io/jam/2024-valentines-day-game-jam'>2024 Valentine's Day Game Jam.</a> Participating in this game jam was part of a module I was studying at university for, 'Rapid Prototyping'. I had the role of programming in C#.",
         "<a href='https://itch.io/jam/2024-valentines-day-game-jam/rate/2555421'>Click here to see the game submission and download.</a>"
     ]
 ));
