@@ -177,11 +177,11 @@ reverseVenom.subjects.push(new Subject(
 ));
 
 reverseVenom.subjects.push(new Subject(
-    "Design Phase",
+    "Pseudo Code",
     [
-        "I spent the first day making a quick prototype design on paper. I started out with writing bulletin points for to define a basic idea of the game.",
-        "A simple sketch was made of what the level layout would be, showing that the game would be on a top-down view of a open field. It also includes where both players and the snake would spawn.",
-        "The bottom right corner of the first page shows the inputs for both players. I wanted to keep inputs simple, five buttons to use for each player. (Four directional inputs for moving, and a jump input.)",
+        "During the design phase, I took the time to do some small pseudo code to get an idea of what interactable objects the game would need, and what functionalities each object would have.",
+        "This especially assisted me in the game's later software development considering the game was being made outside of a game engine.",
+        "The only class that was left out of the final submission was the manager class idea.",
         "<img src='Images/reversevenom_pseudocode_0.jpg' alt='Design page 1' width='400'> <img src='Images/reversevenom_pseudocode_1.jpg' alt='Design page 2' width='400'>",
     ]
 ));

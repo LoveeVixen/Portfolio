@@ -1,0 +1,496 @@
+<!-- KHOGDEN 001115381 -->
+<!-- Help from past given lab task resources -->
+<!-- WEEK 12 NOTE - I wanted do go with the pong idea as I really enjoyed playing through it
+last week, and would love to be able to customise it more in with my own preferences.
+I want to aim to make this similar to the classic Atari Pong, but with a computer AI and
+even customisable game options through HTML input. -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arcade Pong</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<style>
+    body
+    {
+        background-color: rgb(20, 20, 20);
+    }
+
+    .gameContainer
+    {
+        text-align: center;
+    }
+
+    canvas
+    {
+        /* Give the traditional black background for the game. */
+        background-color: black;
+    }
+
+    h1, h3, p
+    {
+        color: white;
+    }
+</style>
+<body>
+    <div class="gameContainer">
+    <h1>KIRK'S ARCADE PONG</h1>
+    <canvas id="sCanvas" width="600" height="400" style="border: solid;"></canvas></br>
+    <p>Serve Speed</p><input type="number" id="serveSpeed" value="4"></br>
+    <input type="button" id="scoreResetButton" value="Reset scores!" onclick="resetScores()"></br>
+    <h3>CONTROLS</h3><p>Player One Move - Z/X</p><p>Player One Serve - G</p></br>
+    <p>Player Two Move - ,/.</p><p>Player Two Serve - H</p>
+    </div>
+    <script type="text/javascript">
+        "use strict";
+        //******************
+        // Variables
+        //******************
+        var c = document.getElementById("sCanvas"); // Reference to the canvas.
+        var ctx = sCanvas.getContext("2d"); // Setup context of the canvas to be 2D.
+        var cHeight = sCanvas.height; // The height reference of the canvas.
+        var cWidth = sCanvas.width; // The width reference of the canvas.
+        var beep = new Audio('Beep.wav'); // The beep audio that will play when the ball bounces off the walls or paddles.
+        var served = false; // Check if one of the players has served.
+        var ballCannotDetectPaddles = false; // If true then the ball won't detect collision from paddles. This boolean is used to prevent the ball from getting stuck inside the paddle.
+        // var changedirection = false; //
+        var score1 = 0;  // for score board
+        var score2 = 0;  // for score board
+
+        var playerOneHuman = false; // If false then player one will be computer controlled.
+        var playerTwoHuman = false; // If false then player two will be computer controlled.
+        var freezeBots = true; // If true then regardless then the bot player whether it's player one or two will be frozen.
+        var idleCountPlayerOne = 6; // Idle count for if player one don't give any input. This will countdown to zero, which will then resort in the player being reset to an computer-controlled player.
+        var idleCountPlayerTwo = 6; // Idle count for if player two don't give any input. This will countdown to zero, which will then resort in the player being reset to an computer-controlled player.
+
+        var serveSpeedMultiplier = 1; // Multiplier for the serve speed. This is mainly used for when the ball is hit in certain angles, such as when the ball hits the middle of the paddle it'll move horizontally much faster.
+
+       // Prepare for loading the image background onto the canvas.
+    //    img.onload = function LoadBackground()
+    //    {
+    //         ctx.drawImage(img, 0, 0); // Display the image.
+    //    }
+
+        setTimeout(idleCounterTick, 1000); // Begin the idle counter.
+
+        //******************
+        //Objects
+        //******************
+         //create paddle object
+        class Paddle
+        {
+            constructor(x,y)
+            {
+                  this.colour = "white"; // The paddle's colour.
+                  this.xPos = x; // X position of the paddle.
+                  this.yPos = y; // Y position of the paddle.
+                  this.width = 10; // Width of the paddle shape.
+                  this.height = 70; // Height of the paddle shape.
+                  this.speed =  4; // The speed that the paddle can move at.
+            }
+
+            drawMe() // Method for drawing out the paddle object.
+            {
+               ctx.beginPath(); // Begin setting up the paddle.
+               ctx.rect(this.xPos, this.yPos, this.width, this.height); // Set the paddle shape.
+               ctx.fillStyle = this.colour; // Set the colour of the paddle.
+               ctx.fill(); // Fill the shapes into the canvas.
+            }
+        } // end paddle object
+
+        //create the sphere object
+        class Sphere {
+            constructor()
+            {
+                this.radius = 10; // Size of the sphere.
+                this.colour = "white"; // Colour of the sphere.
+                this.xPos = cWidth / 2; // The X position of the sphere.
+                this.yPos = cHeight / 2; // The Y position of the sphere.
+                this.speedY = 0; // The vertical speed of the sphere.
+                this.speedX = 0; // The horizontal speed of the sphere.
+            }
+               
+            drawMe()
+            {
+                //method to draw itself
+                ctx.beginPath();
+                ctx.arc(this.xPos, this.yPos, this.radius, 0, Math.PI * 2, true);
+                ctx.fillStyle = this.colour;
+                ctx.fill();
+              
+            }
+            //method to move itself
+            moveMe()
+            {
+                // Prepare the ball for moving into it's next position on the HTML canvas.
+                this.yPos += this.speedY;
+                this.xPos += this.speedX * serveSpeedMultiplier;
+
+                //bounce off the bottom wall
+                if (this.yPos >cHeight-this.radius)
+                {
+                    beep.play(); // Play beep sound as the ball bounces off.
+                    this.speedY = -this.speedY; // Bounce off the top wall
+                    this.yPos = cHeight-this.radius; // This makes sure the ball doesn't get stuck in the vertical walls.
+                }
+                else if(this.yPos<0+this.radius)
+                {
+                    beep.play(); // Play beep sound as the ball bounces off.
+                    this.speedY= -this.speedY; // Bounce off the bottom wall
+                    this.yPos = this.radius; // This makes sure the ball doesn't get stuck in the vertical walls.
+                }
+
+            //stop ball if hit right side
+            if (this.xPos > cWidth)
+            {
+                // Game over, player 1 wins. Freeze the ball.
+                this.speedX = 0; // Freeze horizontal speed.
+                this.speedY = 0; // Freeze vertical speed.
+                serveSpeedMultiplier = 1; // Reset the serve speed back to one so it's ready for the next round.
+                served = false // Set 'served' to false, allowing for the players to start a new round.
+
+                score1++; // Increase player one's score by one.
+            }
+            else if (this.xPos > player2.xPos - 10 && (this.yPos > player2.yPos && this.yPos < (player2.yPos + player2.height)) && !ballCannotDetectPaddles) //bounce off player 2 paddle
+            {
+                beep.play(); // Play beep sound as the ball bounces off.
+                this.speedX = -this.speedX; // Bounce the ball over to player 1's direction.
+
+                // Change the vertical direction of the ball depending where on the paddle the ball hits.
+                if(this.yPos > player2.yPos + (player2.height / 1.75) && this.yPos < (player2.yPos + (player2.height / 1.25)))
+                {
+                    this.speedY /= 3; // When the ball hits the middle of the paddle, rather than bouncing up or down, it's Y speed is divided by 3 to make it move in a almost straight line.
+                    serveSpeedMultiplier += 1; // Increase the serve speed multiplier when it hits the center of the paddle.
+                }
+                else if(this.yPos > player2.yPos && this.yPos < (player2.yPos + (player2.height / 5)))
+                {
+                    this.speedY = 4.25; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1; // Reset the ball's serve speed multiplier back to one once it hits the side of the paddle.
+                }
+                else if(this.yPos > player2.yPos && this.yPos < (player2.yPos + (player2.height / 2)))
+                {
+                    this.speedY = 3; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1.45; // Set the ball serve speed to be slightly faster when it hits the middle edge.
+                }
+                else if(this.yPos > player2.yPos + (player2.height / 5) && this.yPos < (player2.yPos + player2.height))
+                {
+                    this.speedY = -4.25; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1; // Reset the ball's serve speed multiplier back to one once it hits the side of the paddle.
+                }
+                else if(this.yPos > player2.yPos + (player2.height / 2) && this.yPos < (player2.yPos + player2.height))
+                {
+                    this.speedY = -3; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1.45; // Set the ball serve speed to be slightly faster when it hits the middle edge.
+                }
+
+                // Disable collision for a slight moment to prevent the ball getting stuck.
+                ballCannotDetectPaddles = true;
+                setTimeout(enablePaddleCollision, 100); // Enable collision again after after 100 milliseconds.
+
+                // Freezing the player if it's computer controlled.
+                if(!playerTwoHuman)
+                {
+                    freezeBots = true; // Freeze the bot for a short moment to give movement restrictions. This helps to prevent the bot always winning.
+                    setTimeout(botUnfreeze, Math.random() * (6600 / document.getElementById("serveSpeed").value)); // Unfreeze the bot again after a random set of time.
+                }
+            }
+
+            //stop ball if hit left side
+            if (this.xPos < 0)
+            {
+                // Game over, player 2 wins. Freeze the ball.
+                this.speedX = 0; // Freeze horizontal speed.
+                this.speedY = 0; // Freeze vertical speed.
+                serveSpeedMultiplier = 1; // Reset the serve speed back to one so it's ready for the next round.
+                served = false // Set 'served' to false, allowing for the players to start a new round.
+
+                score2++; // Increase player two's score by one.
+            }
+            else if (this.xPos < player1.xPos + 20 && (this.yPos > player1.yPos && this.yPos < (player1.yPos + player1.height)) && !ballCannotDetectPaddles) //bounce off player 1 paddle
+            {
+                beep.play(); // Play beep sound as the ball bounces off.
+                this.speedX = -this.speedX; // Bounce the ball over to player 2's direction.
+
+                // Change the vertical direction of the ball depending where on the paddle the ball hits.
+                if(this.yPos > player1.yPos + (player1.height / 1.75) && this.yPos < (player1.yPos + (player1.height / 1.25)))
+                {
+                    this.speedY /= 3; // When the ball hits the middle of the paddle, rather than bouncing up or down, it's Y speed is divided by 3 to make it move in a almost straight line.
+                    serveSpeedMultiplier += 1; // Increase the serve speed multiplier when it hits the center of the paddle.
+                }
+                else if(this.yPos > player1.yPos && this.yPos < (player1.yPos + (player1.height / 5)))
+                {
+                    this.speedY = 4.25; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1; // Reset the ball's serve speed multiplier back to one once it hits the side of the paddle.
+                }
+                else if(this.yPos > player1.yPos && this.yPos < (player1.yPos + (player1.height / 2)))
+                {
+                    this.speedY = 3; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1.45; // Set the ball serve speed to be slightly faster when it hits the middle edge.
+                }
+                else if(this.yPos > player1.yPos + (player1.height / 5) && this.yPos < (player1.yPos + player1.height))
+                {
+                    this.speedY = -4.25; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1; // Reset the ball's serve speed multiplier back to one once it hits the side of the paddle.
+                }
+                else if(this.yPos > player1.yPos + (player1.height / 2) && this.yPos < (player1.yPos + player1.height))
+                {
+                    this.speedY = -3; // Bounce the ball off the paddle vertically to make it move sideways.
+                    serveSpeedMultiplier = 1.45; // Set the ball serve speed to be slightly faster when it hits the middle edge.
+                }
+
+                // Disable collision for a slight moment to prevent the ball getting stuck.
+                ballCannotDetectPaddles = true;
+                setTimeout(enablePaddleCollision, 100); // Enable collision again after after 100 milliseconds.
+
+                // Freezing the player if it's computer controlled.
+                if(!playerOneHuman)
+                {
+                    freezeBots = true; // Freeze the bot for a short moment to give movement restrictions. This helps to prevent the bot always winning.
+                    setTimeout(botUnfreeze, Math.random() * (6600 / document.getElementById("serveSpeed").value)); // Unfreeze the bot again after a random set of time.
+                }
+            }
+
+                }//end moveMe function
+            }// end Sphere object
+
+        //******************
+        // create game objects
+        //******************
+
+            // Setup the sphere and paddles, ready for the 'render()' function
+            var ball = new Sphere();
+            var player1 = new Paddle(0, 150);
+            var player2 = new Paddle(590, 150);
+
+            //*********************
+            // Deal with key presses
+            // **********************
+
+            var keysDown = []; //empty array to store which keys are being held down
+
+
+        window.addEventListener("keydown", function (event) {
+           keysDown[event.keyCode] = true; //store the code for the key being pressed
+        });
+
+        window.addEventListener("keyup", function (event) {
+         delete  keysDown[event.keyCode] ; // Delete the stored code once the key has been lifted.
+        });
+
+        // Stop the player from being able to set the serve speed too high or low.
+        function serveSpeedValueAlert()
+        {
+            alert("'Serve Speed' has to be between 3 - 6!"); // Execute the alert message.
+        }
+
+        // Function for resetting player scores.
+        function resetScores()
+        {
+            // Reset scores for player one and two.
+            score1 = 0; // Reset player one's score.
+            score2 = 0; // Reset player two's score.
+        }
+
+        // Function for bringing back the ability for the ball to detect paddle collision. Designed for setTimeout().
+        function enablePaddleCollision()
+        {
+            ballCannotDetectPaddles = false; // Disable ball's ability to detect collision with paddles.
+        }
+
+        // Function that ticks down the time whenever human players are being idle
+        function idleCounterTick()
+        {
+            if(idleCountPlayerOne > 0)
+                idleCountPlayerOne--; // Count down by one second.
+            else
+                playerOneHuman = false; // Set player one as a bot.
+
+            if(idleCountPlayerTwo > 0)
+                idleCountPlayerTwo--; // Count down by one second.
+            else
+                playerTwoHuman = false; // Set player two as a bot.
+
+            setTimeout(idleCounterTick, 1000); // Repeat this function every second.
+        }
+
+        // Function for unfreezing bot players.
+        function botUnfreeze()
+        {
+            freezeBots = false; // Allow the bots to move again.
+        }
+
+        // Function for checking player input.
+        function checkKeys()
+        {
+            if(!served) // Check to see if a round hasn't started already before checking for serve input. Prevents either player from serving when a round is already going.
+            {
+                // Player one serves!
+                if (keysDown[71])
+                {
+                    // Check if the serve speed is at a value it shouldn't be.
+                    if(document.getElementById("serveSpeed").value > 6 || document.getElementById("serveSpeed").value < 3)
+                    {
+                        delete keysDown[71]; // This prevents the browser not noticing the button has already been lifted during the alert message.
+                        serveSpeedValueAlert(); // If the serve speed is too high or too low then alert the player, cancelling the serve.
+                    }
+                    else
+                    {
+                        playerOneHuman = true; // Since player one is trying to give input, we know this is a human player, disabling the computer control.
+                        idleCountPlayerOne = 6; // Set the idle counter back to 15 once the game detects input.
+                        served = true; // Ball has been served. Stops players from serving again when the ball is already moving.
+                        freezeBots = false; // If the player is playing against a bot then allow the bot to begin moving.
+                        serveBall(1, 1 * document.getElementById("serveSpeed").value); // Serve the ball.
+                    }
+                }
+
+                // Player two serves!
+                if (keysDown[72])
+                {
+                    // Check if the serve speed is at a value it shouldn't be.
+                    if(document.getElementById("serveSpeed").value > 6 || document.getElementById("serveSpeed").value < 3)
+                    {
+                        delete keysDown[72]; // This prevents the browser not noticing the button has already been lifted during the alert message.
+                        serveSpeedValueAlert(); // If the serve speed is too high or too low then alert the player, cancelling the serve.
+                    }
+                    else
+                    {
+                        playerTwoHuman = true; // Since player two is trying to give input, we know this is a human player, disabling the computer control.
+                        idleCountPlayerTwo = 6; // Set the idle counter back to 15 once the game detects input.
+                        served = true; // Ball has been served. Stops players from serving again when the ball is already moving.
+                        freezeBots = false; // If the player is playing against a bot then allow the bot to begin moving.
+                        serveBall(2, 1 * document.getElementById("serveSpeed").value); // Serve the ball.
+                    }
+                }
+            }
+
+            // Check if player one is trying to control their paddle up or down.
+            if (keysDown[90])
+            {
+                playerOneHuman = true; // Since player one is trying to give input, we know this is a human player, disabling the computer control.
+                idleCountPlayerOne = 6; // Set the idle counter back to 15 once the game detects input.
+                if(player1.yPos > 0)
+                    movePaddle(1, -player1.speed); // Z
+            }
+             
+            if (keysDown[88])
+            {
+                playerOneHuman = true; // Since player one is trying to give input, we know this is a human player, disabling the computer control.
+                idleCountPlayerOne = 6; // Set the idle counter back to 15 once the game detects input.
+                if(player1.yPos < (cHeight-player1.height))
+                    movePaddle(1, player1.speed); // X
+            }
+
+            // If player one is a computer player.
+            if(!playerOneHuman && served && !freezeBots)
+            {
+                if(player1.yPos > ball.yPos - (player1.height / 2)) // Check if bot is above the ball.
+                {
+                    if(player1.yPos > 0)
+                         movePaddle(1, -player1.speed);
+                }
+                else if(player1.yPos < ball.yPos - (player1.height / 2)) // Check if bot is below the ball.
+                {
+                    if(player1.yPos < (cHeight-player1.height))
+                        movePaddle(1, player1.speed); // If the paddle isn't above the ball then it's going to be below, so the computer player will move up instead.
+                }
+            }
+
+            // Check if player two is trying to control their paddle up or down.
+            if (keysDown[190])
+            {
+                playerTwoHuman = true; // Since player two is trying to give input, we know this is a human player, disabling the computer control.
+                idleCountPlayerTwo = 6; // Set the idle counter back to 15 once the game detects input.
+                if(player2.yPos > 0)
+                    movePaddle(2, -player2.speed); // Period/Dot
+            }
+             
+            if (keysDown[188])
+            {
+                playerTwoHuman = true; // Since player two is trying to give input, we know this is a human player, disabling the computer control.
+                idleCountPlayerTwo = 6; // Set the idle counter back to 15 once the game detects input.
+                if(player2.yPos < (cHeight-player2.height))
+                    movePaddle(2, player2.speed); // Comma
+            }
+   
+            // If player two is a computer player.
+            if(!playerTwoHuman && served && !freezeBots)
+            {
+                if(player2.yPos > ball.yPos - (player2.height / 2)) // Check if bot is above the ball.
+                {
+                    if(player2.yPos > 0)
+                        movePaddle(2, -player2.speed);
+                }
+                else if(player2.yPos < ball.yPos - (player2.height / 2)) // Check if bot is below the ball.
+                {
+                    if(player2.yPos < (cHeight-player2.height))
+                        movePaddle(2, player2.speed); // If the paddle isn't above the ball then it's going to be below, so the computer player will move up instead.
+                }
+            }
+        }
+
+        function serveBall(player, serveSpeed)
+        {
+            // Put the ball back in the center of the canvas.
+            ball.xPos = cWidth / 2;
+            ball.yPos = cHeight / 2;
+
+            if(player == 1)
+                ball.speedX = serveSpeed; // Push the ball towards player two.
+            else if(player == 2)
+                ball.speedX = -serveSpeed; // Push the ball towards player one.
+
+            ball.speedY = Math.random() * 3; // Give a random vertical speed to the ball.
+        }
+
+        // Move player paddle
+        function movePaddle(player, moveSpeed)
+        {
+            // Player one movement.
+            if(player == 1)
+                player1.yPos += moveSpeed; // Move player one's paddle up or down.
+
+            // Player two movement.
+            if(player == 2)
+                player2.yPos += moveSpeed; // Move player two's paddle up or down.
+        }
+        
+        // Display both player's scores.
+        function scoreboard()
+        {
+            ctx.font = "50px Arial" // Set the font of the score display.
+            ctx.textAlign = "center"; // Center the text align of the score display.
+
+            // Display the score visually.
+            ctx.fillText(score1.toString(), sCanvas.width / 3.5, sCanvas.height / 7);
+            ctx.fillText(score2.toString(), sCanvas.width / 1.5, sCanvas.height / 7);
+        }
+
+        // Function for displaying all objects on the screen in their current positions.
+        function render()
+        {
+            requestAnimationFrame(render); // Allows the function to repeat calling itself, giving a constant update.
+            ctx.clearRect(0, 0, cWidth, cHeight); // Clear the previous positions that the ball and paddles were in.
+
+            // ctx.drawImage(img, 0, 0); // Load the background again after being cleared.
+
+            if(served) // Check if a round is currently going.
+            {
+                ball.drawMe(); // Display the ball on the canvas in it's new position.
+                ball.moveMe(); // Prepare the ball for when it moves into it's next position.
+            }
+
+            // Draw out player one and two's paddles on the HTML canvas.
+            player1.drawMe();
+            player2.drawMe();
+
+            checkKeys(); // Check for input from player one and two.
+            scoreboard(); // Display the current scores.
+        }
+    
+        render(); //set the animation and drawing on canvas going
+    
+    </script>
+</body>
+
+</html>
