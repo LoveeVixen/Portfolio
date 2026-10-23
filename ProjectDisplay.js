@@ -83,8 +83,11 @@ function DisplayProject(projectTitle)
 var cpp = new Label("C++", "#176cff");
 var cSharp = new Label("C#", "#4589ff");
 var js = new Label("JavaScript", "#7c6500");
+var ueBlueprint = new Label("UE Blueprint", "#394753");
 var html = new Label("HTML", "#df6f06");
 var cSound = new Label("CSound", "#378cfc");
+var glsl = new Label("GLSL", "#fc5437");
+var hlsl = new Label("HLSL", "#442fff");
 var oop = new Label("OOP", "#9d5b1e");
 var unity = new Label("Unity Engine", "#5d5f5f");
 var unreal = new Label("Unreal Engine", "#912a2a");
@@ -126,7 +129,7 @@ finalProject.subjects.push(new Subject(
 finalProject.subjects.push(new Subject(
     "GitHub",
     [
-        "Like most of my university modules I studied on that didn't involve team collaboration, I used GitHub to save my work and continue wherever I left off, whether in the university campus or at home.",
+        "<a href='https://github.com/Kh8407j/FinalProject'>Click here to see the GitHub repository used during study.</a>",
     ]
 ));
 
@@ -187,23 +190,87 @@ reverseVenom.subjects.push(new Subject(
 ));
 
 reverseVenom.subjects.push(new Subject(
-    "Day 2",
-    [
-        "",
-    ]
-));
-
-reverseVenom.subjects.push(new Subject(
-    "Day 3",
-    [
-        "",
-    ]
-));
-
-reverseVenom.subjects.push(new Subject(
     "Media",
     [
         '<iframe width="560" height="315" src="https://www.youtube.com/embed/A_-RlTP4Oj8?si=tiSrnm567lhG3YMT" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>',
         '<a href="https://love-vixen.itch.io/reverse-venom">Click here to see the Itch.io page, where the game can be played.</a>'
+    ]
+));
+
+// Shader Programming
+var shaderProgramming = new Project("Shader Programming");
+shaderProgramming.media = "<img src='Images/shaderprogramming.png' alt='Shader Programming' width='400'>";
+shaderProgramming.labels.push(unreal);
+shaderProgramming.labels.push(ueBlueprint);
+shaderProgramming.labels.push(glsl);
+shaderProgramming.labels.push(hlsl);
+shaderProgramming.labels.push(github);
+
+shaderProgramming.subjects.push(new Subject(
+    "Summary",
+    [
+        "For the shader programming module at University of Greenwich, we focused on learning the node-based material editor in Unreal Engine. Alongside shaders, we were taught how to use Unreal Engine's Niagara system.",
+        "To get us warmed up with understanding shader programming, our tutor introduced us to the website Shadertoy, which uses the language GLSL. We were also taught how we could convert GLSL to HLSL so that it could be added into Unreal Engine.",
+    ]
+));
+
+shaderProgramming.subjects.push(new Subject(
+    "Shadertoy",
+    [
+        "Below are some examples of the shaders made when being taught the basics of shader programming through Shadertoy.",
+        "<a href='https://www.shadertoy.com/view/s3VXzR'>Example 1.</a>",
+        "<a href='https://www.shadertoy.com/view/73VSRz'>Example 2.</a>",
+        "<a href='https://www.shadertoy.com/view/X3lGRH'>Example 3.</a>",
+    ]
+));
+
+shaderProgramming.subjects.push(new Subject(
+    "Unreal Engine, University Presentation",
+    [
+        "The final presentation I made for the shader programming module focuses on the shaders created through Unreal Engine.",
+        "<a href='PDFs/shaderprogrammingpresentation.pdf'>Click here to see the presentation.</a>"
+    ]
+));
+
+shaderProgramming.subjects.push(new Subject(
+    "GitHub",
+    [
+        "<a href='https://github.com/Kh8407j/ShaderProgramming'>Click here to see the GitHub repository used during study.</a>",
+    ]
+));
+
+// AI for Games
+var aiForGames = new Project("AI for Games");
+aiForGames.media = "<img src='Images/aiforgames.png' alt='AI for Games' width='400'>";
+aiForGames.labels.push(unity);
+aiForGames.labels.push(cSharp);
+aiForGames.labels.push(github);
+
+aiForGames.subjects.push(new Subject(
+    "Summary",
+    [
+        "",
+        "",
+    ]
+));
+
+aiForGames.subjects.push(new Subject(
+    "Perlin Noise",
+    [
+        "",
+    ]
+));
+
+aiForGames.subjects.push(new Subject(
+    "NPCs",
+    [
+        "",
+    ]
+));
+
+aiForGames.subjects.push(new Subject(
+    "GitHub",
+    [
+        "<a href='https://github.com/Kh8407j/AiForGames/tree/main'>Click here to see the GitHub repository used during study.</a>",
     ]
 ));
