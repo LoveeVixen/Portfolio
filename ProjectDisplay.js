@@ -249,22 +249,24 @@ aiForGames.labels.push(github);
 aiForGames.subjects.push(new Subject(
     "Summary",
     [
-        "",
-        "",
+        "During the AI for Games course at university, our tutor taught us how we could implement different automation techniques into games.",
+        "For my project, I used perlin noise for a level generating system. To complement this, I also added NPCs that would navigate their way to the player.",
     ]
 ));
 
 aiForGames.subjects.push(new Subject(
     "Perlin Noise",
     [
-        "",
+        "Perlin noise was used to decide what tiles to generate on a flat surface level. There were grass, stone and lava themed tiles to choose from.",
+        "The use of perlin noise allows for a unique level experience each time, while avoiding reliability on 'random'."
     ]
 ));
 
 aiForGames.subjects.push(new Subject(
     "NPCs",
     [
-        "",
+        "I wanted to challenge myself during this project to create a pathfinding system from scratch, due to Unity's built-in AI navigation tools being limited to already created levels. I wanted a pathfinding system that could adapt to levels that were generated through perlin noise.",
+        "To assist the NPCs, tiles would contain references for their neighbor tiles. The AI could use this to determine which tile was closest to their target destination, while checking to see which tiles were lava to avoid stepping over those ones.",
     ]
 ));
 
