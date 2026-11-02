@@ -158,7 +158,7 @@ brighton.labels.push(github);
 brighton.subjects.push(new Subject(
     "Summary",
     [
-        "A Match Made in Brighton is a submission I collaborated on as team of five in-person for the <a href='https://itch.io/jam/2024-valentines-day-game-jam'>2024 Valentine's Day Game Jam.</a> Participating in this game jam was part of a module I was studying at university for, 'Rapid Prototyping'. I had the role of programming in C#.",
+        "A Match Made in Brighton is a submission I collaborated on as team of five in-person for the <a href='https://itch.io/jam/2024-valentines-day-game-jam'>2024 Valentine's Day Game Jam.</a> Participating in this game jam was part of a module I was studying for University of Greenwich, 'Rapid Prototyping'. I had the role of programming in C#.",
         "<a href='https://itch.io/jam/2024-valentines-day-game-jam/rate/2555421'>Click here to see the game submission and download.</a>"
     ]
 ));
@@ -258,7 +258,7 @@ aiForGames.subjects.push(new Subject(
     "Perlin Noise",
     [
         "Perlin noise was used to decide what tiles to generate on a flat surface level. There were grass, stone and lava themed tiles to choose from.",
-        "The use of perlin noise allows for a unique level experience each time, while avoiding reliability on 'random'."
+        "The use of perlin noise allows for a unique level experience each time, while making sure it isn't relying on being 'random'."
     ]
 ));
 
@@ -274,5 +274,34 @@ aiForGames.subjects.push(new Subject(
     "GitHub",
     [
         "<a href='https://github.com/Kh8407j/AiForGames/tree/main'>Click here to see the GitHub repository used during study.</a>",
+    ]
+));
+
+// Game Audio
+var gameAudio = new Project("Game Audio");
+gameAudio.media = "<img src='Images/aiforgames.png' alt='AI for Games' width='400'>";
+gameAudio.labels.push(unreal);
+gameAudio.labels.push(ueBlueprint);
+gameAudio.labels.push(github);
+
+gameAudio.subjects.push(new Subject(
+    "Summary",
+    [
+        "During the AI for Games course at university, our tutor taught us how we could implement different automation techniques into games.",
+        "For my project, I used perlin noise for a level generating system. To complement this, I also added NPCs that would navigate their way to the player.",
+    ]
+));
+
+// Grit Crystal
+var gritCrystal = new Project("Grit Crystal");
+gritCrystal.media = "<img src='Images/gritcrystal0.png' alt='Grit Crystal' width='400'>";
+gritCrystal.labels.push(unity);
+gritCrystal.labels.push(cSharp);
+
+gameAudio.subjects.push(new Subject(
+    "Summary",
+    [
+        "Grit Crystal is a racing game project I started a few months before starting my first year at University of Greenwich. I wanted to create a game with a low-poly look, as at the time I was inspired by the game 'Night of the Consumers', developed by Germfood.",
+        "I aimed for this game to be my first project to include online multiplayer, however I would learn after the importance of implementing online funcionality as early as possible rather than later down the line.",
     ]
 ));
